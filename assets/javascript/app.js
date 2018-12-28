@@ -9,9 +9,9 @@ var questions = [
     {q: "question 5", a: "answer 5"},
 ];
 
-var questionCount = 0;
+var questionIndex = 0;
 
-var questionCountdown = 20;
+var questionCountdown = 5;
 var countdownRunning = false;
 var intervalId;
 
@@ -20,25 +20,32 @@ var intervalId;
 ////////////////////////////////////////////////////////////////////////////////////////
 function renderQuestions() {
 
-        // if there are no more questions, stop renderQuestions function
-        if (questionCount > (questions.length - 1)) {
-            return;
-        }
+    // if there are no more questions, stop renderQuestions function
+    if (questionIndex > (questions.length - 1)) {
+        // TODO: create a end game function that shows stats of game
+        stopCountdown();
+        return;
+    }
 
-        else {
+    // else {
 
-            // TODO: check what question we are one using an if stmt before rendering the next question
-            for (let i = 0; i < questions.length; i++) {
-                $("#questions-div").text(questions[i].q);
-                console.log("count " + questionCount);
-                questionCount++;
-        }
-    };
+        // TODO: check what question we are one using an if stmt before rendering the next question
+        // for (let i = 0; i < questions.length; i++) {
+
+    else if (questionIndex <= (questions.length - 1)) {
+        console.log(questionIndex);
+        $("#questions-div").text(questions[questionIndex].q);
+        questionIndex++;
+        console.log(questionIndex);
+        // renderQuestions();
+    }
 };
 
 function startCountdown() {
     clearInterval(intervalId);
     intervalId = setInterval(decrement, 1000);
+
+    renderQuestions();
 };
 
 function decrement() {
@@ -51,16 +58,16 @@ function decrement() {
 
     // if timer is at 0, stop the countdown
     if (questionCountdown === 0) {
-        stop();
+        stopCountdown();
         // alert("time's up!");
 
         // TODO: allow countdown to show 0, show loading circle (3 sec timeout), before restarting countdown
         restartCountdown();
-    };
+    }
 }
 
 // function to stop the question countdown
-function stop() {
+function stopCountdown() {
     clearInterval(intervalId);
 };
 
@@ -69,8 +76,11 @@ function restartCountdown() {
     // if (!countdownRunning) {
     //     intervalId = setInterval(count, 1000);
     // }
-    questionCountdown = 20;
+    questionCountdown = 5;
     $("#timer").html("<h2>" + questionCountdown + "</h2>");
+    startCountdown();
+    // renderQuestions();
+
 };
 
 
