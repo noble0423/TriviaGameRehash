@@ -18,9 +18,61 @@ var intervalId;
 
 // FUNCTIONS
 ////////////////////////////////////////////////////////////////////////////////////////
-function renderQuestions() {
 
-    // if there are no more questions, stop renderQuestions function
+// Function to make initial API call to get 20 random trivia questions
+function getQuestions() {
+    $.ajax({
+        url: "https://opentdb.com/api.php?amount=20",
+        method: "GET"
+      }).then(function(response) {
+        console.log(response);
+        console.log(response.results.length);
+        // // question
+        // console.log("QUESTION");
+        // console.log("----------------------------------")
+        // console.log(response.results[0].question);
+        // // correct answer
+        // console.log("CORRECT ANSWER");
+        // console.log("----------------------------------")
+        // console.log(response.results[0].correct_answer);
+        // // incorrect answers
+        // console.log("INCORRECT ANSWERS");
+        // console.log("----------------------------------")
+        // console.log(response.results[0].incorrect_answers[0]);
+        // console.log(response.results[0].incorrect_answers[1]);
+        // console.log(response.results[0].incorrect_answers[2]);
+        
+        // startCountdown();
+        renderAPIQuestions(response.results);
+      });
+};
+
+// Function to renderAPIQuestions
+function renderAPIQuestions(data) {
+    // if there are no more questions, stop renderHCQuestions function
+    console.log("render API questions " + data.length);
+    if (questionIndex > (data.length - 1)) {
+        // TODO: create a end game function that shows stats of game
+        stopCountdown();
+        return;
+    }
+
+    // Checks what question we are one using an if stmt before rendering the next question
+
+    else if (questionIndex <= (data.length - 1)) {
+        // display questions on html (TODO: MIGHT WANT TO DO A FUNCTION FOR THIS AND THEN CALL IT HERE)
+        $("#questions-div").text(data[questionIndex].question);
+    }
+};
+
+// function test(data) {
+//     console.log("test function " + data);
+// }
+
+// Function to render the hard coded trivia questions
+function renderHCQuestions() {
+
+    // if there are no more questions, stop renderHCQuestions function
     if (questionIndex > (questions.length - 1)) {
         // TODO: create a end game function that shows stats of game
         stopCountdown();
@@ -55,7 +107,11 @@ function startCountdown() {
     clearInterval(intervalId);
     intervalId = setInterval(decrement, 1000);
 
-    renderQuestions();
+    // Render hard coded trivia questions function call
+    // renderHCQuestions();
+
+    // Render API trivia questions function call
+    renderAPIQuestions();
 };
 
 function decrement() {
@@ -93,6 +149,10 @@ function restartCountdown() {
 
 
 //TODO: 
+    // Make trivia api call 
+        // console.log(response)
+        // get questions to render on html
+        // get answers to render on html
     // Set click event for all answer choices (var userChoice)
         // Compare userChoice to answer for that question
             // If right, show the correct animation
@@ -110,6 +170,7 @@ function restartCountdown() {
 // MAIN PROCESS
 ////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function() {
-    // renderQuestions();
-    startCountdown();
+    // renderHCQuestions();
+    getQuestions();
+    // startCountdown();
 });
