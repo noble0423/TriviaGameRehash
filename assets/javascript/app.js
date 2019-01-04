@@ -25,8 +25,8 @@ function getQuestions() {
         url: "https://opentdb.com/api.php?amount=20",
         method: "GET"
       }).then(function(response) {
-        console.log(response);
-        console.log(response.results.length);
+        // console.log(response);
+        // console.log(response.results.length);
         // // question
         // console.log("QUESTION");
         // console.log("----------------------------------")
@@ -42,7 +42,7 @@ function getQuestions() {
         // console.log(response.results[0].incorrect_answers[1]);
         // console.log(response.results[0].incorrect_answers[2]);
         
-        // startCountdown();
+        // startCountdown(response.results);
         renderAPIQuestions(response.results);
       });
 };
@@ -50,7 +50,8 @@ function getQuestions() {
 // Function to renderAPIQuestions
 function renderAPIQuestions(data) {
     // if there are no more questions, stop renderHCQuestions function
-    console.log("render API questions " + data.length);
+    console.log("render api questions " + data);
+    // console.log("render API questions " + data[questionIndex].question);
     if (questionIndex > (data.length - 1)) {
         // TODO: create a end game function that shows stats of game
         stopCountdown();
@@ -62,12 +63,12 @@ function renderAPIQuestions(data) {
     else if (questionIndex <= (data.length - 1)) {
         // display questions on html (TODO: MIGHT WANT TO DO A FUNCTION FOR THIS AND THEN CALL IT HERE)
         $("#questions-div").text(data[questionIndex].question);
+        startCountdown();
     }
-};
 
-// function test(data) {
-//     console.log("test function " + data);
-// }
+    questionIndex++;
+    renderAPIQuestions(data);
+};
 
 // Function to render the hard coded trivia questions
 function renderHCQuestions() {
@@ -106,12 +107,13 @@ function renderHCQuestions() {
 function startCountdown() {
     clearInterval(intervalId);
     intervalId = setInterval(decrement, 1000);
+    // console.log("startcountdown info.length " + info.length);
 
     // Render hard coded trivia questions function call
     // renderHCQuestions();
 
     // Render API trivia questions function call
-    renderAPIQuestions();
+    // renderAPIQuestions();
 };
 
 function decrement() {
